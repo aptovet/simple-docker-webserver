@@ -1,17 +1,16 @@
 FROM php:fpm
 
+# Install necessary dependencies
 RUN apt-get update \
     && apt-get install -y \
-    libfreetype6-dev \
-    libjpeg-dev \
-    libpng-dev \
-    && yes | pecl install xdebug \
-    && docker-php-ext-configure gd \
-            --with-freetype-dir=/usr/include/freetype2 \
-            --with-png-dir=/usr/include \
-            --with-jpeg-dir=/usr/include \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install mysqli \
-    && docker-php-ext-enable mysqli
+        libfreetype6-dev \
+        libjpeg-dev \
+        libpng-dev \
+        libzip-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-png \
+    && docker-php-ext-install gd mysqli zip \
+    && docker-php-ext-enable mysqli zip
 
-RUN echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
+# Install Xdebug
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
