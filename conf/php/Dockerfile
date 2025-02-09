@@ -7,7 +7,7 @@ RUN apt-get update \
         libjpeg-dev \
         libpng-dev \
         libzip-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-png \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd mysqli zip \
     && docker-php-ext-enable mysqli zip
 
